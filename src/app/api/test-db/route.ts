@@ -1,4 +1,3 @@
-// src/app/api/test-db/route.ts
 import { NextResponse } from 'next/server';
 import { Pool } from 'pg';
 
@@ -15,8 +14,9 @@ export async function GET() {
   try {
     const result = await pool.query('SELECT NOW() AS now');
     return NextResponse.json({ success: true, result: result.rows[0] });
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
     console.error('DB Error:', error);
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+    return NextResponse.json({ success: false, error: message }, { status: 500 });
   }
 }
