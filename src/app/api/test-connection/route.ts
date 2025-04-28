@@ -1,36 +1,23 @@
 import { NextResponse } from 'next/server';
-import { InvokeCommand, LambdaClient } from "@aws-sdk/client-lambda";
-
-const lambdaClient = new LambdaClient({
-    region: "ap-southeast-2",
-    credentials: {
-      accessKeyId: process.env.AMPLIFY_ACCESS_KEY_ID!,
-      secretAccessKey: process.env.AMPLIFY_SECRET_ACCESS_KEY!,
-    },
-  });
 
 export async function GET() {
   try {
-    const command = new InvokeCommand({
-      FunctionName: "rds-connector-lambda", // Replace this!
-      InvocationType: "RequestResponse",
-      Payload: Buffer.from(JSON.stringify({})), // No event data needed yet
+    const lambdaUrl = process.env.LAMBDA_INVOKE_URL;
+
+    const response = await fetch(lambdaUrl!, {
+      method: 'POST',
     });
 
-    const response = await lambdaClient.send(command);
-
-    if (!response.Payload) {
-      throw new Error("No payload returned from Lambda");
+    if (!response.ok) {
+      throw new Error(`Lambda call failed: ${response.statusText}`);
     }
 
-    const decodedPayload = JSON.parse(Buffer.from(response.Payload).toString("utf8"));
+    const data = await response.json();
 
-    return NextResponse.json({
-      success: true,
-      lambdaResponse: decodedPayload,
-    });
-  } catch (error) {
-    console.error("Error invoking Lambda:", error);
-    return NextResponse.json({ success: false, error: (error as Error).message }, { status: 500 });
+    return NextResponse.json({ success: true, lambdaResponse: data });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    console.error('Amplify Route Error:', error);
+    return NextResponse.json({ success: false, error: message }, { status: 500 });
   }
 }
