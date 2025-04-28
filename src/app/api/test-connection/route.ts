@@ -5,7 +5,7 @@ export async function GET() {
     const lambdaUrl = process.env.LAMBDA_INVOKE_URL;
 
     const response = await fetch(lambdaUrl!, {
-      method: 'POST',
+      method: 'GET',  // <-- change POST to GET
     });
 
     if (!response.ok) {
