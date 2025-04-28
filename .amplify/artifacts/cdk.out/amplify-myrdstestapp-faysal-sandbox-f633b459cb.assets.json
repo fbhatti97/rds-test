@@ -1,0 +1,20 @@
+{
+  "version": "41.0.0",
+  "files": {
+    "e57beda8e597d6c3f593e50ae4b6ae942e8c8c455b16e228d21fa37464aaf11b": {
+      "displayName": "amplify-myrdstestapp-faysal-sandbox-f633b459cb Template",
+      "source": {
+        "path": "amplify-myrdstestapp-faysal-sandbox-f633b459cb.template.json",
+        "packaging": "file"
+      },
+      "destinations": {
+        "current_account-current_region": {
+          "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}",
+          "objectKey": "e57beda8e597d6c3f593e50ae4b6ae942e8c8c455b16e228d21fa37464aaf11b.json",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-${AWS::Region}"
+        }
+      }
+    }
+  },
+  "dockerImages": {}
+}
